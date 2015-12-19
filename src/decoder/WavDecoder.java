@@ -15,28 +15,22 @@ import java.util.Iterator;
 
 public class WavDecoder implements Decoder {
     private AudioInputStream ais;
+    private Window window;
     private double[] allData;
     private Complex[][] cData;
 
-    private final double HAMMING_ALPHA = 0.53836;
-    private final double HAMMING_BETA = 0.46164;
-
-    public WavDecoder(File file) throws IOException, UnsupportedAudioFileException {
-        ais  = AudioSystem.getAudioInputStream(file);
-    }
-
-    public WavDecoder(File file, int windowSize) throws IOException, UnsupportedAudioFileException {
+    public WavDecoder(File file, Window w) throws IOException, UnsupportedAudioFileException {
         ais = AudioSystem.getAudioInputStream(file);
-        decode(windowSize);
+        this.window = w;
     }
 
-    public Complex[][] getFFT() {
+    public Complex[][] getData() throws IOException {
+        if (cData == null) decode();
         return cData;
     }
 
-
     @Override
-    public void decode(int windowSize) throws IOException {
+    public void decode() throws IOException {
         int size = ais.available();
         byte[] data = new byte[size];
         ais.read(data);
@@ -55,27 +49,23 @@ public class WavDecoder implements Decoder {
             allData[i] = ret;
         }
 
-
-        cData = new Complex[allData.length/windowSize][windowSize];
+        cData = new Complex[allData.length/window.windowLength][window.windowLength];
         for (int i = 0; i < cData.length; i++) {
-            cData[i] = window(allData, i*windowSize, windowSize);
+            cData[i] = window(i*window.windowLength);
         }
     }
 
-    private Complex[] window(double[] data, int pos, int windowSize) {
+    private Complex[] window(int pos) {
         // w(n) = alpha - Beta * cos(2πn/(N-1))
-        Complex[] output = new Complex[windowSize];
+        Complex[] output = new Complex[window.windowLength];
 
-        for (int i = pos; i < pos + windowSize; i++) {
+        for (int i = pos; i < pos + window.windowLength; i++) {
             int j = i - pos; // go to 0
-            double windowModifier = HAMMING_ALPHA - HAMMING_BETA*Math.cos((2*Math.PI*j)/(windowSize-1));
-            //double windowModifier = 1;
-            output[j] = new Complex(data[i]*windowModifier, 0);
+            double windowModifier = window.getWeight(j);
+            output[j] = new Complex(allData[i]*windowModifier, 0);
         }
 
-        Complex[] ret = FFT.fft(output);
-
-        return ret;
+        return output;
     }
 
 }
