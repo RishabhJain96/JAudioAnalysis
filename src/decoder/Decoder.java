@@ -1,21 +1,26 @@
 package decoder;
 
 import utils.Complex;
+import utils.FFT;
 
 import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.File;
 import java.io.IOException;
 
-/**
- * Created by Rishabh on 12/19/15.
- */
 public abstract class Decoder {
     protected AudioInputStream ais;
     protected Window window;
     protected double[] allData;
     protected Complex[][] cData;
+    protected Complex[][] fft;
+    protected double[][] magnitudes;
+
+    public int getWindowLength() {
+        return window.windowLength;
+    }
+
+    public double getSamplingRate() {
+        return ais.getFormat().getSampleRate();
+    }
 
     /**
      * Decodes stream with given window size to prepare to retrieve data.
@@ -24,14 +29,63 @@ public abstract class Decoder {
      */
     abstract void decode() throws IOException;
 
-    /**
-     * Retrieves Complex data from Audio Stream for decoder. Decodes if necessary
-     *
-     * @return Windowed complex data
-     * @throws IOException
-     */
     public Complex[][] getData() throws IOException {
         if (cData == null) decode();
         return cData;
+    }
+
+    public void calculateMagnitudes() throws IOException {
+        getData();
+        calculateFFT();
+
+        for (int i = 0; i < cData.length; i++) {
+            Complex[] ffti = fft[i];
+            magnitudes[i] = new double[ffti.length];
+
+            // Only want first half -  http://dsp.stackexchange.com/questions/4825/why-is-the-fft-mirrored/4827#4827
+            for (int j = 0; j < fft.length/2; j++) {
+                double re = ffti[j].re();
+                double im = ffti[j].im();
+                magnitudes[i][j] = Math.sqrt(re*re + im*im);
+            }
+        }
+    }
+
+    public double[][] getMagnitudes() throws IOException {
+        if (magnitudes == null) calculateMagnitudes();
+        return magnitudes;
+    }
+
+    public Magnitude getMaximumMagnitude(int index) throws IOException {
+        if (magnitudes == null) calculateMagnitudes();
+
+        double max = -Double.MAX_VALUE;
+        int maxIndex = -1;
+
+        double[] mi = magnitudes[index];
+        for (int i = 0; i < mi.length; i++) {
+            double mag = mi[i];
+            if (mag > max) {
+                max = mag;
+                maxIndex = i;
+            }
+        }
+
+        return new Magnitude(maxIndex, max);
+    }
+
+    public void calculateFFT() throws IOException {
+        getData();
+
+        fft = new Complex[cData.length][window.windowLength];
+
+        for (int i = 0; i < cData.length; i++) {
+            fft[i] = FFT.fft(cData[i]);
+        }
+    }
+
+    public Complex[][] getFFT() throws IOException {
+        if (fft == null) calculateFFT();
+        return fft;
     }
 }
