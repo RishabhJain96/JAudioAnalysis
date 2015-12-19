@@ -1,32 +1,19 @@
 package decoder;
 
 import utils.Complex;
-import utils.FFT;
 
-import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.Iterator;
 
 
-public class WavDecoder implements Decoder {
-    private AudioInputStream ais;
-    private Window window;
-    private double[] allData;
-    private Complex[][] cData;
-
+public class WavDecoder extends Decoder {
     public WavDecoder(File file, Window w) throws IOException, UnsupportedAudioFileException {
-        ais = AudioSystem.getAudioInputStream(file);
         this.window = w;
-    }
-
-    public Complex[][] getData() throws IOException {
-        if (cData == null) decode();
-        return cData;
+        ais = AudioSystem.getAudioInputStream(file);
     }
 
     @Override
