@@ -37,13 +37,13 @@ public abstract class Decoder {
     public void calculateMagnitudes() throws IOException {
         getData();
         calculateFFT();
-
+        magnitudes = new double[fft.length][];
         for (int i = 0; i < cData.length; i++) {
             Complex[] ffti = fft[i];
             magnitudes[i] = new double[ffti.length];
 
             // Only want first half -  http://dsp.stackexchange.com/questions/4825/why-is-the-fft-mirrored/4827#4827
-            for (int j = 0; j < fft.length/2; j++) {
+            for (int j = 0; j < ffti.length/2 - 1; j++) {
                 double re = ffti[j].re();
                 double im = ffti[j].im();
                 magnitudes[i][j] = Math.sqrt(re*re + im*im);

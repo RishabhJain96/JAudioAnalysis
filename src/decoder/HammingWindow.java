@@ -7,6 +7,14 @@ public class HammingWindow extends Window {
     private final double HAMMING_ALPHA = 0.53836;
     private final double HAMMING_BETA = 0.46164;
 
+    public HammingWindow() {
+        super();
+    }
+
+    public HammingWindow(int windowSize) {
+        super(windowSize);
+    }
+
     @Override
     public void calculateWeights() {
         for (int i = 0; i < windowLength; i++) {
