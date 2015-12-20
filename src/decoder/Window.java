@@ -1,8 +1,6 @@
 package decoder;
 
-/**
- * Created by Rishabh on 12/19/15.
- */
+
 public abstract class Window {
     protected double[] weights;
     protected int windowLength;

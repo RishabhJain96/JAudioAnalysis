@@ -38,6 +38,7 @@ public class WavDecoder extends Decoder {
 
         cData = new Complex[allData.length/window.windowLength][window.windowLength];
         for (int i = 0; i < cData.length; i++) {
+            // overlap is important -- http://edoc.mpg.de/get.epl?fid=55356&did=395068&ver=0
             cData[i] = window(i*window.windowLength);
         }
     }
@@ -49,7 +50,7 @@ public class WavDecoder extends Decoder {
         for (int i = pos; i < pos + window.windowLength; i++) {
             int j = i - pos; // go to 0
             double windowModifier = window.getWeight(j);
-            output[j] = new Complex(allData[i]*windowModifier, 0);
+            output[j] = new Complex(allData[i]*windowModifier/2, 0);
         }
 
         return output;
