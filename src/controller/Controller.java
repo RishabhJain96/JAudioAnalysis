@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 public class Controller {
     protected Stage stage;
+    protected ControllerManager manager;
 
     public final void setStage(Stage stage) {
         this.stage = stage;
@@ -31,5 +32,10 @@ public class Controller {
                 alert.showAndWait();
             }
         });
+    }
+
+    public void setStageAndManager(Stage s, ControllerManager manager) {
+        this.stage = s;
+        this.manager = manager;
     }
 }
