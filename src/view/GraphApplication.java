@@ -1,9 +1,13 @@
 package view;
 
+import controller.ControllerManager;
+import controller.MainViewController;
 import decoder.MP3Decoder;
 import decoder.WavDecoder;
 import decoder.WindowFactory;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -25,50 +29,16 @@ public class GraphApplication extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
-        stage.setTitle("Spectral Centroid");
-        //defining the axes
-        final NumberAxis xAxis = new NumberAxis();
-        final NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Time (samples)");
-        //creating the chart
-        final LineChart<Number,Number> lineChart =  new LineChart<Number,Number>(xAxis,yAxis);
-        //final LineChart<Number,Number> lineChart2 =  new LineChart<Number,Number>(xAxis,yAxis);
+    public void start(Stage stage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/MainView.fxml"));
+        Parent root = loader.load();
+        MainViewController controller = loader.getController();
+        controller.passStage(stage);
+        stage.setMinHeight(500);
+        stage.setMinWidth(500);
+        stage.setTitle("Audio Analysis");
 
-        lineChart.setTitle("Spectral Centroid");
-        //defining a series
-        XYChart.Series series = new XYChart.Series();
-        series.setName("Forest Gump");
-        XYChart.Series series2 = new XYChart.Series();
-        series2.setName("Violin Concerto Exerpt");
-
-        lineChart.setCreateSymbols(false);
-        try {
-            WavDecoder decoder = new WavDecoder(new File("/Users/Rishabh/Desktop/audio/test6.wav"), WindowFactory.HammingWindow(1024));
-            WavDecoder decoder2 = new WavDecoder(new File("/Users/Rishabh/Desktop/audio/test4.wav"), WindowFactory.HammingWindow(1024));
-
-            AudioFeature centroid = new SpectralCentroid();
-            double[] data = centroid.calculateFeature(decoder, 44100);
-            for (int i = 0; i < data.length; i++) {
-                System.out.println("Setting Frequency: " + data[i]);
-                series.getData().add(new XYChart.Data(i, data[i]));
-            }
-
-            double[] data2 = centroid.calculateFeature(decoder2, 44100);
-            for (int i = 0; i < data2.length; i++) {
-                series2.getData().add(new XYChart.Data(i, data2[i]));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        }
-
-
-        Scene scene  = new Scene(lineChart,800,600);
-        lineChart.getData().add(series);
-        lineChart.getData().add(series2);
-
+        Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }

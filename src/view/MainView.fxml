@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -9,13 +10,13 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                <MenuItem mnemonicParsing="false" fx:id="addFileMenuItem" onAction="#handleAddFile" text="Add File"></MenuItem>
-                <MenuItem mnemonicParsing="false" fx:id="fileCloseMenuItem" onAction="#handleFileClose" text="Close" />
+                <MenuItem fx:id="addFileMenuItem" mnemonicParsing="false" onAction="#handleAddFile" text="Add File" />
+                <MenuItem fx:id="fileCloseMenuItem" mnemonicParsing="false" onAction="#handleFileClose" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Function">
             <items>
-              <MenuItem mnemonicParsing="false" text="Frequency" />
+              <MenuItem fx:id="showFrequencyGraphMenuItem" mnemonicParsing="false" onAction="#handleShowFrequency" text="Frequency" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -27,8 +28,8 @@
       </MenuBar>
       <SplitPane dividerPositions="0.3" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+            <fx:include fx:id="leftView" source="LeftView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
         </items>
       </SplitPane>
     </children>
