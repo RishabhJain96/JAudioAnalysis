@@ -9,6 +9,11 @@ import java.io.IOException;
 public class SpectralRolloff implements AudioFeature {
 
     @Override
+    public String title() {
+        return "Spectral Rolloff";
+    }
+
+    @Override
     public double[] calculateFeature(Decoder decoder, double samplingRate) throws IOException {
         double[][] magnitudes = decoder.getMagnitudes();
         double[] ret = new double[magnitudes.length];

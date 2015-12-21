@@ -21,6 +21,11 @@ public class Frequency implements AudioFeature {
     }
 
     @Override
+    public String title() {
+        return "Frequency";
+    }
+
+    @Override
     public double[] calculateFeature(Decoder decoder, double samplingRate) throws IOException {
 
         /**

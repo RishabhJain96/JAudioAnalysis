@@ -14,9 +14,8 @@
                 <MenuItem fx:id="fileCloseMenuItem" mnemonicParsing="false" onAction="#handleFileClose" text="Close" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Function">
+          <Menu fx:id="functionMenu" mnemonicParsing="false" text="Function">
             <items>
-              <MenuItem fx:id="showFrequencyGraphMenuItem" mnemonicParsing="false" onAction="#handleShowFrequency" text="Frequency" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">

@@ -13,6 +13,11 @@ import java.util.Arrays;
 public class SpectralCentroid implements AudioFeature {
 
 
+    @Override
+    public String title() {
+        return "Spectral Centroid";
+    }
+
     /**
      * Method: calculateFeature
      *

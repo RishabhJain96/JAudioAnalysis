@@ -12,6 +12,11 @@ import java.io.IOException;
  */
 public class SpectralFlux implements AudioFeature
 {
+	@Override
+	public String title() {
+		return "Spectral Flux";
+	}
+
 	/**
 	 * Calculates the spectral flux for each sample by the calculation given in this
 	 * paper: http://jcis.sbrt.org.br/index.php/JCIS/article/viewFile/292/205
