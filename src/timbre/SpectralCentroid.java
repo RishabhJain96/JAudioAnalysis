@@ -33,7 +33,7 @@ public class SpectralCentroid implements AudioFeature {
             double nSum = 0;
             double dSum = 0;
 
-            for (int j = 1; j < mags.length; j++) {
+            for (int j = 1;  j < mags.length; j++) {
                 double n = samplingRate/decoder.getWindowLength();
                 nSum += mags[j]*mags[j]*j;
                 dSum += mags[j]*mags[j];
