@@ -8,6 +8,7 @@ import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.AudioItem;
+import timbre.Frequency;
 
 import java.io.File;
 import java.net.URL;
@@ -20,16 +21,20 @@ public class MainViewController extends Controller implements Initializable {
     @FXML private Parent leftView;
     @FXML private LeftViewController leftViewController;
 
+    @FXML private Parent graphView;
+    @FXML private GraphViewController graphViewController;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // assert initializations here
+        // TODO: assert initializations here
         System.out.println("Initializing Main View Controller");
     }
 
     public void passStage(Stage stage) {
-        ControllerManager manager = new ControllerManager(this, leftViewController);
+        ControllerManager manager = new ControllerManager(this, leftViewController, graphViewController);
         this.setStageAndManager(stage, manager);
         leftViewController.setStageAndManager(stage, manager);
+        graphViewController.setStageAndManager(stage, manager);
     }
 
     public void handleAddFile(ActionEvent event) {
@@ -46,6 +51,7 @@ public class MainViewController extends Controller implements Initializable {
     }
 
     public void handleShowFrequency(ActionEvent event) {
-        manager.showFrequencyGraph();
+        manager.analyzeDecoders(new Frequency(), "Frequency", 44100);
+
     }
 }

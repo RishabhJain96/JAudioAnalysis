@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ProgressBar;
@@ -17,6 +18,7 @@ import java.util.ResourceBundle;
 public class LeftViewController extends Controller implements Initializable {
     @FXML
     private AnchorPane leftPaneView;
+
     private FileTable<AudioItem> fileTable;
     private TitledPane fileInformationPane;
     private ProgressBar progressBar;
@@ -67,5 +69,13 @@ public class LeftViewController extends Controller implements Initializable {
 
     public ArrayList<AudioItem> getItems() {
         return fileTable.getItems();
+    }
+
+    public void toggleIndeterminateProgressBar() {
+        Platform.runLater(() -> {
+            if (this.progressBar.getProgress() == 0) this.progressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+            else this.progressBar.setProgress(0);
+        });
+
     }
 }

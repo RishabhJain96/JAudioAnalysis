@@ -7,7 +7,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
-import model.AudioItem;
 
 import java.util.ArrayList;
 
