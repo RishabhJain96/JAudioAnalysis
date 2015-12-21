@@ -13,6 +13,7 @@ import model.AudioItem;
 import timbre.AudioFeature;
 import timbre.Frequency;
 import timbre.SpectralCentroid;
+import timbre.SpectralFlux;
 
 import java.io.File;
 import java.net.URL;
@@ -37,9 +38,11 @@ public class MainViewController extends Controller implements Initializable {
         System.out.println("Initializing Main View Controller");
 
         AudioFeature frequency = new Frequency();
+        AudioFeature spectralFlux = new SpectralFlux();
 
         Map<AudioFeature, EventHandler<ActionEvent>> allFeatures = new LinkedHashMap<>();
-        allFeatures.put(frequency, event -> handleShowFrequency());
+        allFeatures.put(frequency, event -> handleShow(frequency));
+        allFeatures.put(spectralFlux, event -> handleShow(spectralFlux));
 
         for (AudioFeature f : allFeatures.keySet()) {
             MenuItem menuItem = new MenuItem(f.title());
@@ -68,8 +71,8 @@ public class MainViewController extends Controller implements Initializable {
         manager.removeGraphs();
     }
 
-    public void handleShowFrequency() {
-        manager.analyzeDecoders(new Frequency(), "Frequency", 44100);
+    public void handleShow(AudioFeature feature) {
+        manager.analyzeDecoders(feature, feature.title(), 44100);
 
     }
 }
